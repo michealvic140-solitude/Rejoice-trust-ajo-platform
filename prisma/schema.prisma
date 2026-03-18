@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  username       String    @unique
+  email          String    @unique
+  passwordHash   String
+  firstName      String
+  middleName     String?
+  lastName       String
+  age            Int?
+  dob            DateTime?
+  phone          String?
+  stateOrigin    String?
+  lga            String?
+  currentState   String?
+  address        String?
+  nickname       String?
+  profilePic     String?   // URL
+  trustScore     Float     @default(0)
+  isVIP          Boolean   @default(false)
+  isRestricted   Boolean   @default(false)
+  isBanned       Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  groups         GroupMember[]
+  transactions   Transaction[]
+  notifications  Notification[]
+  auditLogs      AuditLog[]
+}
+
+model Group {
+  id             String        @id @default(uuid())
+  name           String
+  description    String?
+  amount         Float
+  cycle          CycleType     // enum: DAILY, WEEKLY, MONTHLY
+  status         GroupStatus   @default(INACTIVE) // INACTIVE, ACTIVE, LOCKED
+  terms          String?       // admin editable
+  createdAt      DateTime      @default(now())
+  activatedAt    DateTime?
+  members        GroupMember[]
+  chatMessages   ChatMessage[]
+  transactions   Transaction[]
+}
+
+enum CycleType { DAILY WEEKLY MONTHLY }
+enum GroupStatus { INACTIVE ACTIVE LOCKED }
+
+model GroupMember {
+  id             String    @id @default(uuid())
+  userId         String
+  groupId        String
+  slotNumbers    Int[]     // array for multiple seats
+  roleNumbers    Int[]     // mirrors slots
+  fullNameInGroup String
+  paymentDeadline String?  // "08:30 PM"
+  joinedAt       DateTime  @default(now())
+
+  user           User      @relation(fields: [userId], references: [id])
+  group          Group     @relation(fields: [groupId], references: [id])
+
+  @@unique([userId, groupId])
+}
+
+model Transaction {
+  id             String    @id @default(uuid())
+  code           String    @unique
+  groupId        String
+  userId         String
+  amount         Float
+  status         TxStatus  @default(PENDING) // PENDING, APPROVED, DECLINED
+  proofUrl       String?   // screenshot
+  date           DateTime  @default(now())
+
+  user           User      @relation(fields: [userId], references: [id])
+  group          Group     @relation(fields: [groupId], references: [id])
+}
+
+enum TxStatus { PENDING APPROVED DECLINED }
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  groupId   String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  group     Group    @relation(fields: [groupId], references: [id])
+}
+
+// Add models for Notification, Announcement, AuditLog, etc.
