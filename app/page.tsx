@@ -57,7 +57,7 @@ export default function Home() {
 
   return (
     <div className="pt-28 pb-24 px-6 max-w-7xl mx-auto relative overflow-hidden">
-      {/* Floating coins & ₦ */}
+      {/* Floating coins */}
       {Array.from({ length: 18 }).map((_, i) => (
         <div
           key={i}
@@ -88,7 +88,7 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Leaderboard – top 3 only */}
+      {/* Leaderboard */}
       <div className="glass p-12 rounded-3xl mb-16 animate-fade-in-up delay-300">
         <h2 className="text-5xl font-bold flex items-center justify-center gap-5 mb-10">
           <Trophy className="text-gold w-12 h-12" /> Top Trusted Members
@@ -107,7 +107,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Announcements – exact match to your uploaded image style */}
+      {/* Announcements – exact style from your uploaded image */}
       <div className="mb-20 animate-fade-in-up delay-500">
         <h2 className="text-5xl font-bold flex items-center justify-center gap-5 mb-12">
           <Megaphone className="text-gold w-12 h-12" /> Announcements
