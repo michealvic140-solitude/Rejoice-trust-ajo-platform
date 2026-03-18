@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 export default function CountdownTimer() {
@@ -13,11 +14,11 @@ export default function CountdownTimer() {
       const hours = Math.floor(diff / 3600000);
       const mins = Math.floor((diff % 3600000) / 60000);
       const secs = Math.floor((diff % 60000) / 1000);
-      setTime(`\( {hours.toString().padStart(2,"0")}: \){mins.toString().padStart(2,"0")}:${secs.toString().padStart(2,"0")}`);
+      setTime(`\( {hours.toString().padStart(2, "0")}: \){mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`);
     };
     update();
-    const int = setInterval(update, 1000);
-    return () => clearInterval(int);
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return <div className="text-6xl font-mono text-gold tracking-widest">{time}</div>;
