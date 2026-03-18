@@ -4,72 +4,151 @@ import Link from "next/link";
 import { Trophy, Megaphone } from "lucide-react";
 
 export default function Home() {
-  const [leaderboard, setLeaderboard] = useState([]);
-  const [groups, setGroups] = useState([]);
+  const [leaderboard] = useState([
+    { nickname: "AishaB", trust: 98, points: 1240 },
+    { nickname: "JohnOkon", trust: 95, points: 980 },
+    { nickname: "SarahAde", trust: 92, points: 870 },
+  ]);
+
+  const [groups] = useState([
+    { id: 1, name: "Elite Monthly Circle", amount: 50000, cycle: "Monthly", slotsLeft: 12 },
+  ]);
+
   const [announcements, setAnnouncements] = useState<any[]>([]);
 
   useEffect(() => {
-    setLeaderboard([
-      { nickname: "AishaB", trust: 98, points: 1240 },
-      { nickname: "JohnOkon", trust: 95, points: 980 },
-      { nickname: "SarahAde", trust: 92, points: 870 }
-    ]);
-    setGroups([{ id: 1, name: "Elite Monthly Circle", amount: 50000, cycle: "Monthly", slotsLeft: 12 }]);
-
     const saved = JSON.parse(localStorage.getItem("announcements") || "[]");
-    setAnnouncements(saved.length ? saved : [
-      { tag: "ANNOUNCEMENT", date: "3/18/2026", title: "Welcome to REJOICE TRUST AJO", text: "We are excited to launch our new rotating savings platform. Start saving today!" },
-      { tag: "PROMOTION", date: "3/18/2026", title: "New Group Available", text: "Join our new Platinum Monthly Club and save big! Limited slots available." },
-      { tag: "SERVER UPDATE", date: "3/18/2026", title: "System Maintenance", text: "Scheduled maintenance on Sunday 2AM - 4AM. Platform may be unavailable." }
-    ]);
+    setAnnouncements(
+      saved.length
+        ? saved
+        : [
+            {
+              tag: "ANNOUNCEMENT",
+              date: "3/18/2026",
+              title: "Welcome to REJOICE TRUST AJO",
+              text: "We are excited to launch our new rotating savings platform. Start saving today!",
+            },
+            {
+              tag: "PROMOTION",
+              date: "3/18/2026",
+              title: "New Group Available",
+              text: "Join our new Platinum Monthly Club and save big! Limited slots available.",
+            },
+            {
+              tag: "SERVER UPDATE",
+              date: "3/18/2026",
+              title: "System Maintenance",
+              text: "Scheduled maintenance on Sunday 2AM - 4AM. Platform may be unavailable.",
+            },
+          ]
+    );
   }, []);
 
-  const getStyle = (tag: string) => {
-    if (tag === "PROMOTION") return "border-l-purple-500 bg-purple-950/80";
-    if (tag === "SERVER UPDATE") return "border-l-amber-600 bg-amber-950/80";
-    return "border-l-emerald-500 bg-emerald-950/80";
+  const getCardStyle = (tag: string) => {
+    switch (tag) {
+      case "PROMOTION":
+        return "bg-gradient-to-br from-purple-950/80 to-purple-900/60 border-purple-500/50 shadow-purple-500/20";
+      case "SERVER UPDATE":
+        return "bg-gradient-to-br from-amber-950/80 to-amber-900/60 border-amber-600/50 shadow-amber-500/20";
+      default:
+        return "bg-gradient-to-br from-emerald-950/80 to-emerald-900/60 border-emerald-500/50 shadow-emerald-500/20";
+    }
   };
 
   return (
-    <div className="pt-24 pb-20 px-6 max-w-6xl mx-auto relative">
-      {Array.from({ length: 15 }).map((_, i) => (
-        <div key={i} className="coin" style={{ left: `\( {Math.random() * 100}%`, top: ` \){Math.random() * 40}%`, animationDelay: `${i * 0.4}s` }}>₦</div>
+    <div className="pt-28 pb-24 px-6 max-w-7xl mx-auto relative overflow-hidden">
+      {/* Floating coins & ₦ */}
+      {Array.from({ length: 18 }).map((_, i) => (
+        <div
+          key={i}
+          className="coin absolute text-3xl opacity-70"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 60}%`,
+            animationDelay: `${Math.random() * 5}s`,
+            animationDuration: `${6 + Math.random() * 6}s`,
+          }}
+        >
+          ₦
+        </div>
       ))}
 
-      <div className="text-center py-16">
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="w-14 h-14 bg-gold rounded-full flex items-center justify-center text-black font-bold text-4xl">RTA</div>
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-gold via-amber-300 to-gold bg-clip-text text-transparent tracking-tight">REJOICE TRUST AJO PLATFORM</h1>
+      {/* Hero */}
+      <div className="text-center py-20">
+        <div className="flex items-center justify-center gap-5 mb-8 animate-fade-in">
+          <div className="w-16 h-16 bg-gradient-to-br from-gold to-amber-500 rounded-2xl flex items-center justify-center text-black font-black text-5xl shadow-2xl shadow-gold/50">
+            RTA
+          </div>
+          <h1 className="text-7xl md:text-8xl font-extrabold bg-gradient-to-r from-gold via-amber-300 to-gold bg-clip-text text-transparent tracking-tight animate-gradient">
+            REJOICE TRUST AJO PLATFORM
+          </h1>
         </div>
-        <p className="text-2xl">Join trusted savings circles and build financial discipline through structured rotating contributions.</p>
+        <p className="text-2xl md:text-3xl max-w-4xl mx-auto text-white/90 animate-fade-in-up delay-200">
+          Join trusted savings circles and build financial discipline through structured rotating contributions.
+        </p>
       </div>
 
-      {/* Leaderboard */}
-      <div className="glass p-10 rounded-3xl mb-12">
-        <h2 className="text-4xl font-bold flex items-center gap-4 mb-8"><Trophy className="text-gold" /> Top Trusted Members</h2>
-        {/* (same leaderboard cards as previous version) */}
+      {/* Leaderboard – top 3 only */}
+      <div className="glass p-12 rounded-3xl mb-16 animate-fade-in-up delay-300">
+        <h2 className="text-5xl font-bold flex items-center justify-center gap-5 mb-10">
+          <Trophy className="text-gold w-12 h-12" /> Top Trusted Members
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {leaderboard.map((u: any, i) => (
+            <div
+              key={i}
+              className="glass p-10 rounded-3xl text-center transform hover:scale-105 transition-all duration-300 shadow-xl shadow-gold/10"
+            >
+              <div className="text-8xl mb-4">{i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉"}</div>
+              <div className="text-4xl font-bold text-gold mb-3">{u.nickname}</div>
+              <div className="text-xl">Trust Score: {u.trust} • Points: {u.points}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ANNOUNCEMENTS – EXACT MATCH TO YOUR UPLOADED IMAGE */}
-      <div className="mb-16">
-        <h2 className="text-3xl font-bold flex items-center gap-3 mb-8"><Megaphone className="text-gold" /> Announcements</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {announcements.map((ann, i) => (
-            <div key={i} className={`glass p-8 rounded-3xl border-l-4 ${getStyle(ann.tag)}`}>
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-xs uppercase font-bold tracking-widest px-4 py-1 rounded border border-gold/50">{ann.tag}</span>
-                <span className="text-xs opacity-70">{ann.date}</span>
+      {/* Announcements – exact match to your uploaded image style */}
+      <div className="mb-20 animate-fade-in-up delay-500">
+        <h2 className="text-5xl font-bold flex items-center justify-center gap-5 mb-12">
+          <Megaphone className="text-gold w-12 h-12" /> Announcements
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          {announcements.map((ann, index) => (
+            <div
+              key={index}
+              className={`glass p-10 rounded-3xl border-l-8 ${getCardStyle(ann.tag)} shadow-2xl transform hover:scale-[1.03] transition-all duration-300`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-sm uppercase font-extrabold tracking-widest px-5 py-2 rounded-full border border-gold/40 bg-black/30">
+                  {ann.tag}
+                </span>
+                <span className="text-sm opacity-70 font-medium">{ann.date}</span>
               </div>
-              <h3 className="text-2xl font-bold mb-3">{ann.title}</h3>
-              <p className="text-sm opacity-90">{ann.text}</p>
+              <h3 className="text-3xl font-bold mb-5 text-white/95">{ann.title}</h3>
+              <p className="text-base opacity-90 leading-relaxed">{ann.text}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Active Groups */}
-      <h2 className="text-3xl mb-6">Active Circles</h2>
-      {/* (same group cards as previous version) */}
+      <h2 className="text-4xl font-bold text-center mb-12">Active Circles</h2>
+      <div className="grid md:grid-cols-2 gap-10">
+        {groups.map((g: any) => (
+          <Link
+            href={`/groups/${g.id}`}
+            key={g.id}
+            className="glass p-12 rounded-3xl glow-gold block transform hover:scale-[1.02] transition-all duration-300"
+          >
+            <div className="text-4xl font-bold mb-4 text-white">{g.name}</div>
+            <div className="text-6xl font-extrabold text-gold mb-6">₦{g.amount.toLocaleString()}</div>
+            <div className="flex justify-between text-2xl">
+              <span>{g.cycle}</span>
+              <span className="text-green-400">{g.slotsLeft} slots remaining</span>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
