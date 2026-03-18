@@ -16,14 +16,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gold/30 px-6 py-4 flex items-center justify-between backdrop-blur-xl bg-black/40">
-      <div className="flex items-center gap-4">
+    <nav className="glass fixed top-0 left-0 right-0 z-50 border-b border-gold/30 px-6 py-4 flex items-center justify-between">
+      <div className="flex items-center gap-3">
         <div className="w-11 h-11 bg-gradient-to-br from-gold to-amber-600 rounded-full flex items-center justify-center text-black font-black text-3xl shadow-lg shadow-gold/40">
           RTA
         </div>
-        <div className="text-3xl font-extrabold bg-gradient-to-r from-gold via-amber-300 to-gold bg-clip-text text-transparent tracking-tight animate-pulse">
+        <span className="text-3xl font-extrabold bg-gradient-to-r from-gold via-amber-400 to-gold bg-clip-text text-transparent tracking-tight animate-gradient">
           REJOICE TRUST AJO PLATFORM
-        </div>
+        </span>
       </div>
 
       <div className="flex items-center gap-10 text-base font-medium">
