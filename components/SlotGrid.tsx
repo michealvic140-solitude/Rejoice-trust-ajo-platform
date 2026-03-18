@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 
 export default function SlotGrid({ groupId, onJoin }: { groupId: number; onJoin: (slots: number[]) => void }) {
@@ -9,7 +10,7 @@ export default function SlotGrid({ groupId, onJoin }: { groupId: number; onJoin:
   useEffect(() => {
     if (locked !== null) {
       const interval = setInterval(() => {
-        setTimer(t => {
+        setTimer((t) => {
           if (t <= 1) {
             setLocked(null);
             return 600;
@@ -29,9 +30,6 @@ export default function SlotGrid({ groupId, onJoin }: { groupId: number; onJoin:
     } else {
       setLocked(i);
       setTimer(600);
-      setTimeout(() => {
-        if (locked === i) setLocked(null);
-      }, 600000);
     }
   };
 
@@ -52,8 +50,10 @@ export default function SlotGrid({ groupId, onJoin }: { groupId: number; onJoin:
           </button>
         ))}
       </div>
-      {locked !== null && <p className="text-gold text-center">Slot locked for {Math.floor(timer/60)}:{(timer%60).toString().padStart(2,"0")}</p>}
-      <button onClick={() => onJoin([locked!])} className="w-full bg-gold text-black py-4 rounded-2xl mt-6 font-bold">Confirm Selected Slots</button>
+      {locked !== null && <p className="text-gold text-center">Slot locked for {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}</p>}
+      <button onClick={() => onJoin(locked !== null ? [locked] : [])} className="w-full bg-gold text-black py-4 rounded-2xl mt-6 font-bold">
+        Confirm Selected Slots
+      </button>
     </div>
   );
 }
