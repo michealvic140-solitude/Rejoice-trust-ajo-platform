@@ -4,30 +4,50 @@ import { Bell, User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
-  const [logged, setLogged] = useState(false);
-  useEffect(() => setLogged(!!localStorage.getItem("currentUser")), []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("currentUser"));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
 
   return (
-    <nav className="glass fixed top-0 z-50 w-full px-8 py-4 flex items-center justify-between border-b border-gold/30">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-black font-bold text-3xl">RTA</div>
-        <div className="text-3xl font-bold tracking-tight text-gold">REJOICE TRUST AJO PLATFORM</div>
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gold/30 px-6 py-4 flex items-center justify-between backdrop-blur-xl bg-black/40">
+      <div className="flex items-center gap-4">
+        <div className="w-11 h-11 bg-gradient-to-br from-gold to-amber-600 rounded-full flex items-center justify-center text-black font-black text-3xl shadow-lg shadow-gold/40">
+          RTA
+        </div>
+        <div className="text-3xl font-extrabold bg-gradient-to-r from-gold via-amber-300 to-gold bg-clip-text text-transparent tracking-tight animate-pulse">
+          REJOICE TRUST AJO PLATFORM
+        </div>
       </div>
-      <div className="flex items-center gap-8 text-sm">
-        <Link href="/" className="hover:text-gold">Home</Link>
-        <Link href="/groups" className="hover:text-gold">Groups</Link>
-        {logged ? (
+
+      <div className="flex items-center gap-10 text-base font-medium">
+        <Link href="/" className="hover:text-gold transition-colors duration-300">Home</Link>
+        <Link href="/groups" className="hover:text-gold transition-colors duration-300">Groups</Link>
+
+        {isLoggedIn ? (
           <>
-            <Link href="/dashboard" className="hover:text-gold">Dashboard</Link>
-            <Link href="/admin" className="hover:text-gold font-medium">Admin</Link>
-            <Bell className="w-5 h-5" />
-            <Link href="/profile"><User className="w-5 h-5" /></Link>
-            <button onClick={() => { localStorage.clear(); window.location.reload(); }}><LogOut className="w-5 h-5 text-red-400" /></button>
+            <Link href="/dashboard" className="hover:text-gold transition-colors duration-300">Dashboard</Link>
+            <Link href="/admin" className="hover:text-gold transition-colors duration-300 font-semibold">Admin</Link>
+            <Bell className="w-6 h-6 cursor-pointer hover:text-gold transition-colors" />
+            <Link href="/profile">
+              <User className="w-6 h-6 hover:text-gold transition-colors" />
+            </Link>
+            <button onClick={handleLogout}>
+              <LogOut className="w-6 h-6 text-red-400 hover:text-red-300 transition-colors" />
+            </button>
           </>
         ) : (
           <>
-            <Link href="/login">Login</Link>
-            <Link href="/register" className="bg-gold text-black px-6 py-2 rounded-full">Register</Link>
+            <Link href="/login" className="hover:text-gold transition-colors">Login</Link>
+            <Link href="/register" className="bg-gradient-to-r from-gold to-amber-500 text-black px-8 py-3 rounded-full font-bold hover:from-amber-400 hover:to-gold transition-all shadow-lg shadow-gold/30">
+              Register
+            </Link>
           </>
         )}
       </div>
