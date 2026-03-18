@@ -1,8 +1,8 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import SlotGrid from "../../components/SlotGrid";
-import CountdownTimer from "../../components/CountdownTimer";
+import SlotGrid from "../../../components/SlotGrid";
+import CountdownTimer from "../../../components/CountdownTimer";
 import { MessageCircle } from "lucide-react";
 
 export default function GroupDetail() {
